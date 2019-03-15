@@ -7,13 +7,6 @@ clc
 
 fclose('all');
 
-%% Just a test comment for GitHub
-clear all
-close all
-clc
-
-fclose('all');
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Nominate the source folders
