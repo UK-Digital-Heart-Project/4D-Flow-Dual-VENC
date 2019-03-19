@@ -64,7 +64,7 @@ f. The difference between the original high-Venc PC cine-stack and the final mer
 g. A simple text-mode summary.
 
 Note that the input cine-stacks are sorted according to slice location and trigger time, and that the output cine-stacks are written
-in the order [ Rows, Column, Epoch, Slice ], with the last index varying most slowly according to the MATLAB convention.
+in the order [ Row, Column, Epoch, Slice ], with the last index varying most slowly according to the MATLAB convention.
 This may mean that, whereas the input data show entire volumes at a given epoch, then step to the next epoch, the outputs show complete cines
 of each slice, before advancing to the next slice.
 
