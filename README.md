@@ -1,9 +1,17 @@
 # 4D Flow Dual VENC
-Analysis pipeline for dual VENC 4D Flow CMR
+
+Analysis pipeline for dual-Venc 4D-Flow cardiac MRI.
+
+## Prerequisites
+
+- MATLAB, with at least the Image Processing Toolbox installed.
+- Windows, Linux or MacOS - there should not be any platform dependencies.  
+
+## Introduction
 
 Merged dual-Venc flow maps are created from separately acquired low-Venc and High-Venc phase-contrast MR scans.
 
-Inputs are:
+## Input data
 
 A. A high and a low-Venc modulus cine-stack.
 
@@ -12,7 +20,10 @@ B. A high and a low-Venc PC cine-stack.
 Modulus and phase images acquired at the same Venc are simultaneous, but not necessarily images acquired at the low and high Vencs -
 i.e., the acquisitions at different Vencs may be interleaved or sequential.
 
-The analysis workflow is as follows:
+A complete analysis involves merging low and high-Venc data sets acquired with 3 velocity-encoding directions along orthogonal axes
+(typically referred to the patient orientation rather than the LAB frame).
+
+## Method
 
 1. At each cardiac phase (epoch), the low-Venc modulus volume is co-registered to the high-Venc volume.
    First, a manual shift is applied in all 3 directions, to allow for gross subject motion, and the amount of shift recorded.   
@@ -33,6 +44,8 @@ The analysis workflow is as follows:
    This has the *precision* (velocity resolution) of the low-Venc acquisition, with the *dynamic range* of the high-Venc acquisition,
    with any wrapping corrected *using a measurement rather than an estimate.* The velocity-to-noise ratio is also better than that of the 
    original high-Venc acquisition.
+
+## Outputs
    
 The workflow creates an audit trail of several intermediate results, as well as the final merged PC cine-stack and a short text-mode summary.
 
@@ -46,6 +59,38 @@ d. Screenshots of each epoch of the modulus and PC acquisition, before and after
 
 e. The merged PC cine-stack.
 
-f. The difference between the original high-Venc PC image stack and the final merged PC cine-stack - i.e., a "discrepancy" measure.
+f. The difference between the original high-Venc PC cine-stack and the final merged PC cine-stack - i.e., a "discrepancy" measure.
 
 g. A simple text-mode summary.
+
+Note that the input cine-stacks are sorted according to slice location and trigger time, and that the output cine-stacks are written
+in the order [ Rows, Column, Epoch, Slice ], with the last index varying most slowly according to the MATLAB convention.
+This may mean that, whereas the input data show entire volumes at a given epoch, then step to the next epoch, the outputs show complete cines
+of each slice, before advancing to the next slice.
+
+## Installation
+
+Clone this repo to a folder in your MATLAB workspace, then add all the directories to the path:
+
+```addpath(genpath(pwd)); savepath;```
+
+## Usage
+
+Run the single main script at the outer level.
+
+Follow the prompts to nominate source and target directories.
+
+During the co-registration step, a GUI with sliders will prompt for manual shift corrections in 3 directions to align a low-Venc modolus epoch
+to its high-Venc counterpart. A push-button applies the change. Corrections are carried over from one epoch to the next, so it may be sufficient
+to make a careful correction for the first epoch, then hit "Apply" for the rest. In any case, the manually corrected low-Venc stack is merely the
+starting point for the automated non-rigid co-registration.
+
+## Test dara
+
+Anonymized DICOM data are available on request from the author:
+
+ptokarcz@ic.ac.uk
+
+## Citation
+
+TBC.
