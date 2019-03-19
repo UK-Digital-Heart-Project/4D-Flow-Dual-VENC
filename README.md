@@ -23,6 +23,10 @@ i.e., the acquisitions at different Vencs may be interleaved or sequential.
 A complete analysis involves merging low and high-Venc data sets acquired with 3 velocity-encoding directions along orthogonal axes
 (typically referred to the patient orientation rather than the LAB frame).
 
+Velocities (in units of cm/s) are calculated from the input PC cine-stacks according to the equation:
+
+Velocity = Intercept + Slope.Grayscale, where Intercept = - LowVenc and Slope = LowVenc/(2^11).
+
 ## Method
 
 1. At each cardiac phase (epoch), the low-Venc modulus volume is co-registered to the high-Venc volume.
@@ -44,6 +48,17 @@ A complete analysis involves merging low and high-Venc data sets acquired with 3
    This has the *precision* (velocity resolution) of the low-Venc acquisition, with the *dynamic range* of the high-Venc acquisition,
    with any wrapping corrected *using a measurement rather than an estimate.* The velocity-to-noise ratio is also better than that of the 
    original high-Venc acquisition.
+
+The final PC cine-stacks are generated according to the equation:
+
+Grayscale = uint16((2^15).(Velocity/Venc + 1.0)), where Venc is the velocity limit appropriate to the cine-stack.
+
+The Venc is written (explicitly or implicitly) to the output  header in at least 3 places:
+
+- Header.Csa.FlowVenc.
+- Header.RescaleSlope and Header.RescaleIntercept.
+- Header.SequenceName, e.g., "FL200" for Venc = 200 cm/s.
+
 
 ## Outputs
    
