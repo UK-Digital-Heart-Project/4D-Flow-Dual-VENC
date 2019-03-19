@@ -25,7 +25,9 @@ A complete analysis involves merging low and high-Venc data sets acquired with 3
 
 Velocities (in units of cm/s) are calculated from the input PC cine-stacks according to the equation:
 
-Velocity = Intercept + Slope.Grayscale, where Intercept = - LowVenc and Slope = LowVenc/(2^11).
+Velocity = Intercept + Slope.Grayscale, 
+
+where Intercept = - LowVenc and Slope = LowVenc/(2^11).
 
 ## Method
 
@@ -51,14 +53,15 @@ Velocity = Intercept + Slope.Grayscale, where Intercept = - LowVenc and Slope = 
 
 The final PC cine-stacks are generated according to the equation:
 
-Grayscale = uint16((2^15).(Velocity/Venc + 1.0)), where Venc is the velocity limit appropriate to the cine-stack.
+Grayscale = uint16((2^15).(Velocity/Venc + 1.0)), 
+
+where Venc is the velocity limit appropriate to the cine-stack.
 
 The Venc is written (explicitly or implicitly) to the output  header in at least 3 places:
 
 - Header.Csa.FlowVenc.
 - Header.RescaleSlope and Header.RescaleIntercept.
 - Header.SequenceName, e.g., "FL200" for Venc = 200 cm/s.
-
 
 ## Outputs
    
