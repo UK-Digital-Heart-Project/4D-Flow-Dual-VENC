@@ -103,7 +103,7 @@ to its high-Venc counterpart. A push-button applies the change. Corrections are 
 to make a careful correction for the first epoch, then hit "Apply" for the rest. In any case, the manually corrected low-Venc stack is merely the
 starting point for the automated non-rigid co-registration.
 
-## Test dara
+## Test data
 
 Anonymized DICOM data are available on request from the author:
 
