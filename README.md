@@ -59,7 +59,7 @@ where Venc is the velocity limit appropriate to the cine-stack.
 
 The Venc is written (explicitly or implicitly) to the output  header in at least 3 places:
 
-- Header.Csa.FlowVenc.
+- Header.csa.FlowVenc.
 - Header.RescaleSlope and Header.RescaleIntercept.
 - Header.SequenceName, e.g., "FL200" for Venc = 200 cm/s.
 
