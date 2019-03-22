@@ -63,6 +63,22 @@ The Venc is written (explicitly or implicitly) to the output  header in at least
 - Header.RescaleSlope and Header.RescaleIntercept.
 - Header.SequenceName, e.g., "FL200" for Venc = 200 cm/s.
 
+NOTE THAT, FOR _OUTPUT_ IMAGES, THE _FlowVenc_ MAY NOT BE WRITTEN RELIABLY, AND YOU SHOULD NOT DEPEND ON IT;
+USE THE _RescaleSlope_ and _RescaleIntercept_ INSTEAD.
+YOU CAN ALSO PARSE THE _SequenceName_ BY STRIPPING ANY NON-NUMERIC CHARACTERS AND CONVERTING THE REMAINING STRING TO A NUMBER.
+
+NOTE, ALSO, THAT UNPREOCESSED _INPUT_ IMAGES NEED TO BE TREATED DIFFERENTLY,
+SINCE THE _RescaleSlope_ and _RescaleIntercept_ ARE SET TO 2 AND - 4096, RESPECTIVELY, AND THESE ARE MEANINGLESS.
+INSTEAD OF THESE, YOU SHOULD FETCH THE _FlowVenc_ USING THE FUNCTION _pft_FetchVencFromHeader_, AND USE THE CONVERSION:
+
+Velocity = Intercept + Slope.Grayscale, 
+
+where Intercept = - Venc,
+
+Slope = 2.0*Venc/double(2^BS),
+
+and BS is read from the BitsStored field (either 12 or 16) of the Dicom header.
+
 ## Outputs
    
 The workflow creates an audit trail of several intermediate results, as well as the final merged PC cine-stack and a short text-mode summary.
