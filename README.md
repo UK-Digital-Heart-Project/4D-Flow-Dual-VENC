@@ -79,6 +79,10 @@ Slope = 2.0*Venc/double(2^BS),
 
 and BS is read from the BitsStored field (either 12 or 16) of the Dicom header.
 
+A uniform solution is to use the function _pft_GetVelocityScaling_, which takes one input - this may be either a pathname,
+or a Dicom header read explicitly from a file - and returns the Intercept and Slope correctly for both original Siemens files
+and dual-Venc merged results, having regard for the differences between headers (described above).
+
 ## Outputs
    
 The workflow creates an audit trail of several intermediate results, as well as the final merged PC cine-stack and a short text-mode summary.
