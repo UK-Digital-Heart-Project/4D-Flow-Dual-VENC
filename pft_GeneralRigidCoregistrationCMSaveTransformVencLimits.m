@@ -450,7 +450,7 @@ delete(wb);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Write out a small summary file
-fid = fopen(fullfile(Root, 'Summary - Non-Rigid Co-Registration.txt'), 'wt');
+fid = fopen(fullfile(Root, 'Summary - Rigid Co-Registration.txt'), 'wt');
 
 fprintf(fid, 'Lo-Venc Magnitude source folder: %s\n', LoVencMagnSource);
 fprintf(fid, 'Hi-Venc Magnitude source folder: %s\n', HiVencMagnSource);
