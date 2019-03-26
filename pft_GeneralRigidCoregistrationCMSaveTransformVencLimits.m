@@ -193,6 +193,8 @@ for e = 1:NEPOCHS
   % Now perform the non-rigid co-registration and save the transformation for re-use
   Transform = imregtform(MovingFine, FixedFine, 'rigid', Optimizer, Metric);
   
+  RegisteredMovingFine = imwarp(MovingFine, Transform, 'OutputView', imref3d(size(MovingFine)));
+  
   % Downsample the result in the z-direction  
   RegisteredMoving = pft_DownsampleSlices(RegisteredMovingFine, SZ, TZ);
   
