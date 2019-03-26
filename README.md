@@ -114,7 +114,7 @@ Clone this repo to a folder in your MATLAB workspace, then add all the directori
 
 ## Usage
 
-Run the single main script at the outer level.
+Run one of the main scripts at the outer level.
 
 Follow the prompts to nominate source and target directories.
 
