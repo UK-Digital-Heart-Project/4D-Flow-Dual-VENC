@@ -190,7 +190,7 @@ for e = 1:NEPOCHS
   
   writetable(T, fullfile(TransformTarget, Leaf));  
   
-  % Now perform the non-rigid co-registration and save the transformation for re-use
+  % Now perform the rigid co-registration and save the transformation for re-use
   Transform = imregtform(MovingFine, FixedFine, 'rigid', Optimizer, Metric);
   
   RegisteredMovingFine = imwarp(MovingFine, Transform, 'OutputView', imref3d(size(MovingFine)));
@@ -250,7 +250,7 @@ for e = 1:NEPOCHS
   MovingFine = circshift(MovingFine, [ RowShift, ColShift, PlnShift ]);
   MovingFine = MovingFine(1+PADS:end-PADS, 1+PADS:end-PADS, 1+PADS:end-PADS); 
   
-  % Apply the previously computed non-rigid transformation
+  % Apply the previously computed rigid transformation
   RegisteredMovingFine = imwarp(MovingFine, Transform, 'OutputView', imref3d(size(MovingFine)));
   
   % Downsample the result in the z-direction
