@@ -269,7 +269,7 @@ for e = 1:NEPOCHS
   % Create another velocity image mosaic for later display
   CC = pft_MosaicImages(RegisteredMoving, Rows, Cols, Wd, Ht);
   
-  % Display the original High-Venc and Low-Venc velocity image mosaics together 
+  % Display the original High-Venc and Low-Venc velocity image mosaics together
   imshowpair(AA, BB, 'falsecolor');
   pause(0.25);
   imshowpair(AA, BB, 'falsecolor');
