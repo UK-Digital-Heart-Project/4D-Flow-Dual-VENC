@@ -27,7 +27,8 @@ else
   % This applies to Siemens source images, whose Intercept and Slope are meaningless
   Venc = pft_GetVencFromHeader(Source);
   
-  BS = Source.BitsStored;
+  % This field is subject to transcription errors, and may be reset to 16, so disregard the Dicom value
+  BS = 12;
   
   Intercept = - double(Venc);
   Slope     = 2.0*double(Venc)/double(2^BS);
