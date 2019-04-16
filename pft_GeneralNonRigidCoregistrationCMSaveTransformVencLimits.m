@@ -12,25 +12,28 @@ fclose('all');
 %% Nominate the source folders
 StartPath = 'S:\4-D Flow MRI\Studies';
 
-LoVencMagnSource = uigetdir(StartPath, 'Lo-Venc MAGNITUDE folder');
+% 01. Low-Venc Magnitude
+LoVencMagnitudeSource = uigetdir(StartPath, 'Low-Venc MAGNITUDE folder');
 
-if ~ischar(LoVencMagnSource)
+if ~ischar(LoVencMagnitudeSource)
   h = msgbox('No folder chosen', 'Exit', 'modal');
   uiwait(h);
   delete(h);
   return;
 end 
 
-HiVencMagnSource = uigetdir(StartPath, 'Hi-Venc MAGNITUDE folder');
+% 02. High-Venc Magnitude
+HiVencMagnitudeSource = uigetdir(StartPath, 'High-Venc MAGNITUDE folder');
 
-if ~ischar(HiVencMagnSource)
+if ~ischar(HiVencMagnitudeSource)
   h = msgbox('No folder chosen', 'Exit', 'modal');
   uiwait(h);
   delete(h);
   return;
 end
   
-LoVencPhaseSource = uigetdir(StartPath, 'Lo-Venc PHASE folder');
+% 03. Low-Venc Phase
+LoVencPhaseSource = uigetdir(StartPath, 'Low-Venc PHASE folder');
 
 if ~ischar(LoVencPhaseSource)
   h = msgbox('No folder chosen', 'Exit', 'modal');
@@ -39,7 +42,8 @@ if ~ischar(LoVencPhaseSource)
   return;
 end 
 
-HiVencPhaseSource = uigetdir(StartPath, 'Hi-Venc PHASE folder');
+% 04. High-Venc Phase
+HiVencPhaseSource = uigetdir(StartPath, 'High-Venc PHASE folder');
 
 if ~ischar(HiVencPhaseSource)
   h = msgbox('No folder chosen', 'Exit', 'modal');
@@ -60,43 +64,71 @@ if ~ischar(Root)
   return;
 end
 
-% Motion-corrected Low-Venc modulus
-MoCoLoVencMagnTarget = fullfile(Root, 'OFFLINE - MOCO LOW-VENC MAGNITUDE - NON-RIGID');
+% 01. Motion-corrected Low-Venc modulus
+MoCoLoVencMagnitudeTarget = fullfile(Root, 'OFFLINE - MOCO LOW-VENC MAGNITUDE - NON-RIGID');
 
-if (exist(MoCoLoVencMagnTarget, 'dir') ~= 7)
-  mkdir(MoCoLoVencMagnTarget);
+if (exist(MoCoLoVencMagnitudeTarget, 'dir') ~= 7)
+  mkdir(MoCoLoVencMagnitudeTarget);
 end
 
-% Motion-corrected Low-Venc velocity
-MoCoLoVencVelyTarget = fullfile(Root, 'OFFLINE - MOCO LOW-VENC VELOCITY - NON-RIGID');
+% 02. Motion-corrected Low-Venc velocity
+MoCoLoVencVelocityTarget = fullfile(Root, 'OFFLINE - MOCO LOW-VENC VELOCITY - NON-RIGID');
 
-if (exist(MoCoLoVencVelyTarget, 'dir') ~= 7)
-  mkdir(MoCoLoVencVelyTarget);
+if (exist(MoCoLoVencVelocityTarget, 'dir') ~= 7)
+  mkdir(MoCoLoVencVelocityTarget);
 end
 
-% Motion-corrected fused velocity
-MoCoFusionVelyTarget = fullfile(Root, 'OFFLINE - MOCO FUSED VELOCITY - NON-RIGID');
+% 03. Motion-corrected fused velocity
+MoCoFusedVelocityTarget = fullfile(Root, 'OFFLINE - MOCO FUSED VELOCITY - NON-RIGID');
 
-if (exist(MoCoFusionVelyTarget, 'dir') ~= 7)
-  mkdir(MoCoFusionVelyTarget);
+if (exist(MoCoFusedVelocityTarget, 'dir') ~= 7)
+  mkdir(MoCoFusedVelocityTarget);
 end
 
-% Discrepancy between the motion-corrected fused velocity and the High-Venc velocity
+% 04. Filtered motion-corrected fused velocity
+FilteredMoCoFusedVelocityTarget = fullfile(Root, 'OFFLINE - FILTERED MOCO FUSED VELOCITY - NON-RIGID');
+
+if (exist(FilteredMoCoFusedVelocityTarget, 'dir') ~= 7)
+  mkdir(FilteredMoCoFusedVelocityTarget);
+end
+
+% 05. Discrepancy between the motion-corrected fused velocity and the High-Venc velocity
 DiscrepancyTarget = fullfile(Root, 'OFFLINE - MOCO FUSED VELOCITY DISCREPANCY - NON-RIGID');
 
 if (exist(DiscrepancyTarget, 'dir') ~= 7)
   mkdir(DiscrepancyTarget);
 end
 
-% Co-registration mosaic screenshots, both modulus and phase
+% 06. Twice-corrected fused velocity
+TwiceCorrectedVelocityTarget = fullfile(Root, 'OFFLINE - TWICE-CORRECTED FUSED VELOCITY - NON-RIGID');
+
+if (exist(TwiceCorrectedVelocityTarget, 'dir') ~= 7)
+  mkdir(TwiceCorrectedVelocityTarget);
+end
+
+% 07. Filtered twice-corrected fused velocity
+FilteredTwiceCorrectedVelocityTarget = fullfile(Root, 'OFFLINE - FILTERED TWICE-CORRECTED FUSED VELOCITY - NON-RIGID');
+
+if (exist(FilteredTwiceCorrectedVelocityTarget, 'dir') ~= 7)
+  mkdir(FilteredTwiceCorrectedVelocityTarget);
+end
+
+% 08. Residual between the twice-corrected fused velocity and the High-Venc velocity
+ResidualTarget = fullfile(Root, 'OFFLINE - TWICE-CORRECTED FUSED VELOCITY RESIDUAL - NON-RIGID');
+
+if (exist(ResidualTarget, 'dir') ~= 7)
+  mkdir(ResidualTarget);
+end
+
+% 09. Co-registration mosaic screenshots, both modulus and phase
 ScreenshotTarget = fullfile(Root, 'OFFLINE - SCREENSHOTS - NON-RIGID');
 
 if (exist(ScreenshotTarget, 'dir') ~= 7)
   mkdir(ScreenshotTarget);
 end
 
-% Manual shift corrections and displacement fields
-DisplacementTarget = fullfile(Root, 'DISPLACEMENT FIELDS');
+% 10. Manual shift corrections and displacement fields
+DisplacementTarget = fullfile(Root, 'OFFLINE - DISPLACEMENT FIELDS - NON-RIGID');
 
 if (exist(DisplacementTarget, 'dir') ~= 7)
   mkdir(DisplacementTarget);
@@ -105,16 +137,16 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Read in the source data
-[ LoVencMagnData, LoVencMagnInfo ] = pft_ReadDicomCineStack(LoVencMagnSource);
-[ HiVencMagnData, HiVencMagnInfo ] = pft_ReadDicomCineStack(HiVencMagnSource);
+[ LoVencMagnitudeData, LoVencMagnitudeInfo ] = pft_ReadDicomCineStack(LoVencMagnitudeSource);
+[ HiVencMagnitudeData, HiVencMagnitudeInfo ] = pft_ReadDicomCineStack(HiVencMagnitudeSource);
 
 [ LoVencPhaseData, LoVencPhaseInfo ] = pft_ReadDicomCineStack(LoVencPhaseSource);
 [ HiVencPhaseData, HiVencPhaseInfo ] = pft_ReadDicomCineStack(HiVencPhaseSource);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% Extract some basic dimensions from the High-Venc magnitude image (and the first image slice in the stack)
-[ NROWS, NCOLS, NEPOCHS, NSLICES ] = size(HiVencMagnData);
+%% Extract some basic dimensions from the High-Venc Magnitude image (and the first image slice in the stack)
+[ NROWS, NCOLS, NEPOCHS, NSLICES ] = size(HiVencMagnitudeData);
 
 Wd = NCOLS;
 Ht = NROWS;
@@ -122,15 +154,12 @@ NP = NSLICES;
 
 [ Rows, Cols ] = pft_GetBestMosaicDimensions(Wd, Ht, NP);
 
-Rows = Rows - 1;
-Cols = Cols + 1;
-
-PS = HiVencMagnInfo{1}.PixelSpacing(1);
+PS = HiVencMagnitudeInfo{1}.PixelSpacing(1);
 PS = 0.01*round(PS/0.01);
 
 DR = PS(1);
 
-ST = HiVencMagnInfo{1}.SliceThickness;
+ST = HiVencMagnitudeInfo{1}.SliceThickness;
 ST = 0.01*round(ST/0.01);
 
 DZ = ST;
@@ -138,20 +167,23 @@ DZ = ST;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Convert the phase images to velocity units (cm/s)
-HiVenc = pft_GetVencFromHeader(HiVencPhaseInfo{1});
-LoVenc = pft_GetVencFromHeader(LoVencPhaseInfo{1});
+[ Intercept, Slope ] = pft_GetVelocityScaling(LoVencPhaseInfo{1});
 
-HVBS = HiVencPhaseInfo{1}.BitsStored;
-LVBS = LoVencPhaseInfo{1}.BitsStored;
+LoVencVelocity = Intercept + Slope*LoVencPhaseData;
 
-HiVencVelocity = double(HiVenc)*(2.0*double(HiVencPhaseData)/double(2^HVBS) - 1.0);
-LoVencVelocity = double(LoVenc)*(2.0*double(LoVencPhaseData)/double(2^LVBS) - 1.0);
+LoVenc = - Intercept;
+
+[ Intercept, Slope ] = pft_GetVelocityScaling(HiVencPhaseInfo{1});
+
+HiVencVelocity = Intercept + Slope*HiVencPhaseData;
+
+HiVenc = - Intercept;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Assign some o/p arrays
-MoCoLoVencMagn = zeros([NROWS, NCOLS, NEPOCHS, NSLICES], 'double');
-MoCoLoVencVely = zeros([NROWS, NCOLS, NEPOCHS, NSLICES], 'double');
+MoCoLoVencMagnitude = zeros([NROWS, NCOLS, NEPOCHS, NSLICES], 'double');
+MoCoLoVencVelocity  = zeros([NROWS, NCOLS, NEPOCHS, NSLICES], 'double');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -167,11 +199,11 @@ PlnShift = 0;
 
 for e = 1:NEPOCHS
   % Interpolate the fixed (High-Venc) image to cubical voxels  
-  Fixed = squeeze(HiVencMagnData(:, :, e, :));  
+  Fixed = squeeze(HiVencMagnitudeData(:, :, e, :));  
   [ FixedFine, SZ, TZ ] = pft_InterpolateSlices(Fixed, DR, DZ);
   
   % Interpolate the moving (Low-Venc) image to cubical voxels
-  Moving = squeeze(LoVencMagnData(:, :, e, :));
+  Moving = squeeze(LoVencMagnitudeData(:, :, e, :));
   [ MovingFine, SZ, TZ ] = pft_InterpolateSlices(Moving, DR, DZ);
   
   % Save 2 modulus image mosaics for later display
@@ -199,7 +231,7 @@ for e = 1:NEPOCHS
   
   save(fullfile(DisplacementTarget, Leaf), 'Displacement');
   
-  MoCoLoVencMagn(:, :, e, :) = RegisteredMoving;
+  MoCoLoVencMagnitude(:, :, e, :) = RegisteredMoving;
   
   % Create another modulus image mosaic for later display
   CC = pft_MosaicImages(RegisteredMoving, Rows, Cols, Wd, Ht);
@@ -260,7 +292,7 @@ for e = 1:NEPOCHS
   BB = pft_MosaicImages(Moving, Rows, Cols, Wd, Ht);
   
   % Insert an epoch of the motion-corrected velocity image into the output cine-stack
-  MoCoLoVencVely(:, :, e, :) = RegisteredMoving;
+  MoCoLoVencVelocity(:, :, e, :) = RegisteredMoving;
   
   % Create another velocity image mosaic for later display
   CC = pft_MosaicImages(RegisteredMoving, Rows, Cols, Wd, Ht);
@@ -302,39 +334,125 @@ delete(f);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Create the fused velocity images - begin with an estimate of the wrapping correction, limited at either end to 4 times 2*LoVenc
-Delta = 2.0*LoVenc*round(0.5*(HiVencVelocity - MoCoLoVencVely)/LoVenc);
+Delta = 2.0*LoVenc*round(0.5*(HiVencVelocity - MoCoLoVencVelocity)/LoVenc);
 
 Exclude = (abs(Delta) > 8.0*LoVenc);    
 Include = ~Exclude;
 
 % Rescale the o/p to 16-bits
-MoCoFusionVely = zeros([NROWS, NCOLS, NEPOCHS, NSLICES], 'double');
+MoCoFusedVelocity = zeros([NROWS, NCOLS, NEPOCHS, NSLICES], 'double');
 
-MoCoFusionVely(Include) = MoCoLoVencVely(Include) + Delta(Include);
+MoCoFusedVelocity(Include) = MoCoLoVencVelocity(Include) + Delta(Include);
 
-LL = LoVenc*floor(min(MoCoFusionVely(:))/LoVenc);
-UL = LoVenc*ceil(max(MoCoFusionVely(:))/LoVenc);
+LL = LoVenc*floor(min(MoCoFusedVelocity(:))/LoVenc);
+UL = LoVenc*ceil(max(MoCoFusedVelocity(:))/LoVenc);
 
 NewFusedVenc = max(abs(LL), abs(UL));
 
-FusedPhaseData = uint16(double(2^15)*(MoCoFusionVely/NewFusedVenc + 1.0));
+FusedPhaseData = uint16(double(2^15)*(MoCoFusedVelocity/NewFusedVenc + 1.0));
 
 % Create the discrepancy image
-DiscrepantVely = MoCoFusionVely - HiVencVelocity;
+DiscrepantVelocity = MoCoFusedVelocity - HiVencVelocity;
 
-LL = LoVenc*floor(min(DiscrepantVely(:))/LoVenc);
-UL = LoVenc*ceil(max(DiscrepantVely(:))/LoVenc);
+LL = LoVenc*floor(min(DiscrepantVelocity(:))/LoVenc);
+UL = LoVenc*ceil(max(DiscrepantVelocity(:))/LoVenc);
 
-DiscrepantVenc = max(abs(LL), abs(UL));
+DiscrepantNewVenc = max(abs(LL), abs(UL));
 
-DiscrepantPhaseData = uint16(double(2^15)*(DiscrepantVely/DiscrepantVenc + 1.0));
+DiscrepantPhaseData = uint16(double(2^15)*(DiscrepantVelocity/DiscrepantNewVenc + 1.0));
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% Write out the fused phase images first
+%% Create the FILTERED fused velocity images
+FilteredMoCoFusedVelocity = zeros([NROWS, NCOLS, NEPOCHS, NSLICES], 'double');
+
+Kernel = [ 1.0 2.0 1.0 ; ...
+           2.0 4.0 2.0 ; ...
+           1.0 2.0 1.0 ]/16.0;
+
+n = 1;
+
+for s = 1:NSLICES
+  for e = 1:NEPOCHS
+    Part = MoCoFusedVelocity(:, :, e, s);
+    
+    FilteredMoCoFusedVelocity(:, :, e, s) = conv2(Part, Kernel, 'same');
+    
+    n = n + 1;
+  end
+end
+
+LL = LoVenc*floor(min(FilteredMoCoFusedVelocity(:))/LoVenc);
+UL = LoVenc*ceil(max(FilteredMoCoFusedVelocity(:))/LoVenc);
+
+NewFilteredFusedVenc = max(abs(LL), abs(UL));
+
+FilteredFusedPhaseData = uint16(double(2^15)*(FilteredMoCoFusedVelocity/NewFilteredFusedVenc + 1.0));
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+%% Create the TWICE-CORRECTED fused velocity images to account for interpolation effects at wrapping boundaries after co-registration
+Epsilon = LoVenc*round((HiVencVelocity - MoCoFusedVelocity)/LoVenc);
+
+Exclude = (abs(Epsilon) > LoVenc);    
+Include = ~Exclude;
+
+% Rescale the o/p to 16-bits
+TwiceCorrectedFusedVelocity = zeros([NROWS, NCOLS, NEPOCHS, NSLICES], 'double');
+
+TwiceCorrectedFusedVelocity(Include) = MoCoFusedVelocity(Include) + Epsilon(Include);
+
+LL = LoVenc*floor(min(TwiceCorrectedFusedVelocity(:))/LoVenc);
+UL = LoVenc*ceil(max(TwiceCorrectedFusedVelocity(:))/LoVenc);
+
+TwiceCorrectedNewFusedVenc = max(abs(LL), abs(UL));
+
+TwiceCorrectedFusedPhaseData = uint16(double(2^15)*(TwiceCorrectedFusedVelocity/TwiceCorrectedNewFusedVenc + 1.0));
+
+% Create the residual image
+ResidualVelocity = TwiceCorrectedFusedVelocity - HiVencVelocity;
+
+LL = LoVenc*floor(min(ResidualVelocity(:))/LoVenc);
+UL = LoVenc*ceil(max(ResidualVelocity(:))/LoVenc);
+
+ResidualNewVenc = max(abs(LL), abs(UL));
+
+ResidualPhaseData = uint16(double(2^15)*(ResidualVelocity/ResidualNewVenc + 1.0));
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Create the FILTERED twice-corrected velocity images
+FilteredTwiceCorrectedFusedVelocity = zeros([NROWS, NCOLS, NEPOCHS, NSLICES], 'double');
+
+Kernel = [ 1.0 2.0 1.0 ; ...
+           2.0 4.0 2.0 ; ...
+           1.0 2.0 1.0 ]/16.0;
+
+n = 1;
+
+for s = 1:NSLICES
+  for e = 1:NEPOCHS
+    Part = TwiceCorrectedFusedVelocity(:, :, e, s);
+    
+    FilteredTwiceCorrectedFusedVelocity(:, :, e, s) = conv2(Part, Kernel, 'same');
+    
+    n = n + 1;
+  end
+end
+
+LL = LoVenc*floor(min(FilteredTwiceCorrectedFusedVelocity(:))/LoVenc);
+UL = LoVenc*ceil(max(FilteredTwiceCorrectedFusedVelocity(:))/LoVenc);
+
+FilteredTwiceCorrectedNewFusedVenc = max(abs(LL), abs(UL));
+
+FilteredTwiceCorrectedFusedPhaseData = uint16(double(2^15)*(FilteredTwiceCorrectedFusedVelocity/FilteredTwiceCorrectedNewFusedVenc + 1.0));
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% 01. Write out the motion-corrected Lo-Venc modulus images
 Dictionary = dicomdict('get');
 
-wb = waitbar(0, 'Writing out fused velocity images');
+wb = waitbar(0, 'Writing out MoCo Lo-Venc modulus images');
 
 NFILES = NEPOCHS*NSLICES;
 
@@ -342,11 +460,15 @@ n = 1;
 
 for s = 1:NSLICES
   for e = 1:NEPOCHS
-    Head = pft_ModifyHeader(LoVencPhaseInfo{n}, NewFusedVenc, 'Synthetic RSS image', '16-bit fused phase image');
+    Head = LoVencMagnitudeInfo{n};
   
-    OutputPathName = fullfile(MoCoFusionVelyTarget, pft_NumberedFileName(n));
+    Head.RescaleType       = 'Grayscale';
+    Head.SeriesDescription = 'Synthetic RSS image';
+    Head.ImageComments     = 'MoCo Lo-Venc Magnitude image';
   
-    dicomwrite(FusedPhaseData(:, :, e, s), OutputPathName, Head, 'CreateMode', 'copy', 'Dictionary', Dictionary, 'WritePrivate', true);
+    OutputPathName = fullfile(MoCoLoVencMagnitudeTarget, pft_NumberedFileName(n));
+  
+    dicomwrite(uint16(MoCoLoVencMagnitude(:, :, e, s)), OutputPathName, Head, 'CreateMode', 'copy', 'Dictionary', Dictionary, 'WritePrivate', true);
   
     waitbar(double(n)/double(NFILES), wb, sprintf('%1d of %1d files written', n, NFILES));
     
@@ -360,8 +482,8 @@ delete(wb);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% Write out the motion-corrected Lo-Venc velocity images
-MoCoLoVencPhaseData = uint16(double(2^15)*(MoCoLoVencVely/LoVenc + 1.0));
+%% 02. Write out the motion-corrected Lo-Venc velocity images
+MoCoLoVencPhaseData = uint16(double(2^15)*(MoCoLoVencVelocity/LoVenc + 1.0));
 
 wb = waitbar(0, 'Writing out MoCo Lo-Venc velocity images');
 
@@ -373,7 +495,7 @@ for s = 1:NSLICES
   for e = 1:NEPOCHS
     Head = pft_ModifyHeader(LoVencPhaseInfo{n}, LoVenc, 'Synthetic RSS image', '16-bit MoCo Low-Venc phase image');
     
-    OutputPathName = fullfile(MoCoLoVencVelyTarget, pft_NumberedFileName(n));
+    OutputPathName = fullfile(MoCoLoVencVelocityTarget, pft_NumberedFileName(n));
   
     dicomwrite(MoCoLoVencPhaseData(:, :, e, s), OutputPathName, Head, 'CreateMode', 'copy', 'Dictionary', Dictionary, 'WritePrivate', true);
   
@@ -389,8 +511,8 @@ delete(wb);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% Write out the motion-corrected Lo-Venc modulus images
-wb = waitbar(0, 'Writing out MoCo Lo-Venc modulus images');
+%% 03. Write out the motion-corrected fused velocity images
+wb = waitbar(0, 'Writing out fused velocity images');
 
 NFILES = NEPOCHS*NSLICES;
 
@@ -398,15 +520,11 @@ n = 1;
 
 for s = 1:NSLICES
   for e = 1:NEPOCHS
-    Head = LoVencMagnInfo{n};
+    Head = pft_ModifyHeader(LoVencPhaseInfo{n}, NewFusedVenc, 'Synthetic RSS image', '16-bit fused phase image');
   
-    Head.RescaleType       = 'Grayscale';
-    Head.SeriesDescription = 'Synthetic RSS image';
-    Head.ImageComments     = 'MoCo Lo-Venc magnitude image';
+    OutputPathName = fullfile(MoCoFusedVelocityTarget, pft_NumberedFileName(n));
   
-    OutputPathName = fullfile(MoCoLoVencMagnTarget, pft_NumberedFileName(n));
-  
-    dicomwrite(uint16(MoCoLoVencMagn(:, :, e, s)), OutputPathName, Head, 'CreateMode', 'copy', 'Dictionary', Dictionary, 'WritePrivate', true);
+    dicomwrite(FusedPhaseData(:, :, e, s), OutputPathName, Head, 'CreateMode', 'copy', 'Dictionary', Dictionary, 'WritePrivate', true);
   
     waitbar(double(n)/double(NFILES), wb, sprintf('%1d of %1d files written', n, NFILES));
     
@@ -420,7 +538,34 @@ delete(wb);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% Write out the discrepant velocity images
+%% 04. Write out the filtered motion-corrected fused velocity
+wb = waitbar(0, 'Writing out filtered fused velocity images');
+
+NFILES = NEPOCHS*NSLICES;
+
+n = 1;
+
+for s = 1:NSLICES
+  for e = 1:NEPOCHS
+    Head = pft_ModifyHeader(LoVencPhaseInfo{n}, NewFilteredFusedVenc, 'Synthetic RSS image', '16-bit filtered fused phase image');
+  
+    OutputPathName = fullfile(FilteredMoCoFusedVelocityTarget, pft_NumberedFileName(n));
+  
+    dicomwrite(FilteredFusedPhaseData(:, :, e, s), OutputPathName, Head, 'CreateMode', 'copy', 'Dictionary', Dictionary, 'WritePrivate', true);
+  
+    waitbar(double(n)/double(NFILES), wb, sprintf('%1d of %1d files written', n, NFILES));
+    
+    n = n + 1;
+  end
+end
+
+waitbar(1, wb, sprintf('%1d of %1d files written', NFILES, NFILES));
+pause(1.0);
+delete(wb);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% 05. Write out the discrepant velocity images
 wb = waitbar(0, 'Writing out discrepant velocity images');
 
 NFILES = NEPOCHS*NSLICES;
@@ -429,7 +574,7 @@ n = 1;
 
 for s = 1:NSLICES
   for e = 1:NEPOCHS
-    Head = pft_ModifyHeader(LoVencPhaseInfo{n}, DiscrepantVenc, 'Synthetic RSS image', '16-bit discrepant phase image');
+    Head = pft_ModifyHeader(LoVencPhaseInfo{n}, DiscrepantNewVenc, 'Synthetic RSS image', '16-bit discrepant phase image');
     
     OutputPathName = fullfile(DiscrepancyTarget, pft_NumberedFileName(n));
   
@@ -447,27 +592,123 @@ delete(wb);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%% 06. Write out the twice-corrected fused velocity images
+wb = waitbar(0, 'Writing out twice-corrected fused velocity images');
+
+NFILES = NEPOCHS*NSLICES;
+
+n = 1;
+
+for s = 1:NSLICES
+  for e = 1:NEPOCHS
+    Head = pft_ModifyHeader(LoVencPhaseInfo{n}, TwiceCorrectedNewFusedVenc, 'Synthetic RSS image', '16-bit twice-corrected fused phase image');
+  
+    OutputPathName = fullfile(TwiceCorrectedVelocityTarget, pft_NumberedFileName(n));
+  
+    dicomwrite(TwiceCorrectedFusedPhaseData(:, :, e, s), OutputPathName, Head, 'CreateMode', 'copy', 'Dictionary', Dictionary, 'WritePrivate', true);
+  
+    waitbar(double(n)/double(NFILES), wb, sprintf('%1d of %1d files written', n, NFILES));
+    
+    n = n + 1;
+  end
+end
+
+waitbar(1, wb, sprintf('%1d of %1d files written', NFILES, NFILES));
+pause(1.0);
+delete(wb);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% 07. Write out the filtered twice-corrected fused velocity images
+wb = waitbar(0, 'Writing out filtered twice-corrected fused velocity images');
+
+NFILES = NEPOCHS*NSLICES;
+
+n = 1;
+
+for s = 1:NSLICES
+  for e = 1:NEPOCHS
+    Head = pft_ModifyHeader(LoVencPhaseInfo{n}, FilteredTwiceCorrectedNewFusedVenc, 'Synthetic RSS image', '16-bit filtered twice-corrected fused phase image');
+  
+    OutputPathName = fullfile(FilteredTwiceCorrectedVelocityTarget, pft_NumberedFileName(n));
+  
+    dicomwrite(FilteredTwiceCorrectedFusedPhaseData(:, :, e, s), OutputPathName, Head, 'CreateMode', 'copy', 'Dictionary', Dictionary, 'WritePrivate', true);
+  
+    waitbar(double(n)/double(NFILES), wb, sprintf('%1d of %1d files written', n, NFILES));
+    
+    n = n + 1;
+  end
+end
+
+waitbar(1, wb, sprintf('%1d of %1d files written', NFILES, NFILES));
+pause(1.0);
+delete(wb);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% 08. Write out the residual velocity images
+wb = waitbar(0, 'Writing out residual velocity images');
+
+NFILES = NEPOCHS*NSLICES;
+
+n = 1;
+
+for s = 1:NSLICES
+  for e = 1:NEPOCHS
+    Head = pft_ModifyHeader(LoVencPhaseInfo{n}, ResidualNewVenc, 'Synthetic RSS image', '16-bit residual phase image');
+    
+    OutputPathName = fullfile(ResidualTarget, pft_NumberedFileName(n));
+  
+    dicomwrite(ResidualPhaseData(:, :, e, s), OutputPathName, Head, 'CreateMode', 'copy', 'Dictionary', Dictionary, 'WritePrivate', true);
+  
+    waitbar(double(n)/double(NFILES), wb, sprintf('%1d of %1d files written', n, NFILES));
+    
+    n = n + 1;
+  end
+end
+
+waitbar(1, wb, sprintf('%1d of %1d files written', NFILES, NFILES));
+pause(1.0);
+delete(wb);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% 09. Screenshots have already been saved on-the-fly during the co-registration phase
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% 10. Manual shifts and displacement fields have also been saved already
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %% Write out a small summary file
 fid = fopen(fullfile(Root, 'Summary - Non-Rigid Co-Registration.txt'), 'wt');
 
-fprintf(fid, 'Lo-Venc Magnitude source folder: %s\n', LoVencMagnSource);
-fprintf(fid, 'Hi-Venc Magnitude source folder: %s\n', HiVencMagnSource);
+fprintf(fid, 'Lo-Venc Magnitude source folder: %s\n', LoVencMagnitudeSource);
+fprintf(fid, 'Hi-Venc Magnitude source folder: %s\n', HiVencMagnitudeSource);
 fprintf(fid, 'Lo-Venc Phase source folder:     %s\n', LoVencPhaseSource);
 fprintf(fid, 'Hi-Venc Phase source folder:     %s\n', HiVencPhaseSource);
 
 fprintf(fid, '\n');
 
-fprintf(fid, 'Output root folder:              %s\n', Root);
+fprintf(fid, 'Output root folder: %s\n', Root);
 
 fprintf(fid, '\n');
 
-fprintf(fid, 'Low Venc   = %.2f cm/s\n', LoVenc);
-fprintf(fid, 'High Venc  = %.2f cm/s\n', HiVenc);
-fprintf(fid, 'Fused Venc = %.2f cm/s\n', NewFusedVenc);
+fprintf(fid, 'Original Low Venc  = %.2f cm/s\n', LoVenc);
+fprintf(fid, 'Original High Venc = %.2f cm/s\n', HiVenc);
 
 fprintf(fid, '\n');
 
-fprintf(fid, 'Residual Venc = %.2f cm/s\n', DiscrepantVenc);
+fprintf(fid, 'Synthetic Once-Corrected Fused Venc  = %.2f cm/s\n', NewFusedVenc);
+fprintf(fid, 'Filtered Once-Corrected Fused Venc   = %.2f cm/s\n', NewFilteredFusedVenc);
+fprintf(fid, 'Synthetic Twice-Corrected Fused Venc = %.2f cm/s\n', TwiceCorrectedNewFusedVenc);
+fprintf(fid, 'Filtered Twice-Corrected Fused Venc  = %.2f cm/s\n', FilteredTwiceCorrectedNewFusedVenc);
+
+fprintf(fid, '\n');
+
+fprintf(fid,'Once-Corrected Discrepant Venc = %.2f cm/s\n', DiscrepantNewVenc);
+frintf(fid, 'Twice-Corrected Residual Venc  = %.2f cm/s\n', ResidualNewVenc);
 
 fprintf(fid, '\n');
 

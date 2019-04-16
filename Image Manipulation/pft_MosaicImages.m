@@ -6,7 +6,7 @@ function Mosaic = pft_MosaicImages(Stack, Rows, Cols, Wd, Ht)
 % PFT - 18. 05. 2018.                                                                                                               %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Fetch the dimensions of a 2-D slice or mosaic - the dimensions will always be multiples of 128
+% Fetch the dimensions of a 2-D slice or mosaic
 [ NR, NC, NP ] = size(Stack);   
 
 % The case of a 1x1 image stack is trivial
@@ -17,7 +17,7 @@ end
 
 % Initialise an o/p array
 Class  = class(Stack);
-Mosaic = zeros(Ht*Rows, Wd*Cols, Class);
+Mosaic = zeros([Ht*Rows, Wd*Cols], Class);
 
 % Write the planes of the stack to the appropriate tiles of the mosaic, making allowance for possible empty tiles at the end
 P = 1;
