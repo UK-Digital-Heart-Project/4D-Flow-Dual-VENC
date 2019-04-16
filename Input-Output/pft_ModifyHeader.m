@@ -7,7 +7,7 @@ Head = SiemensCsaParse(Head);
 % Next, edit the sequence name to reflect the new Venc value
 Head.SequenceName = strcat('FL', num2str(round(NewVenc)));
 
-% Now add the new Venc to the private 'csa' field of the Siemens header
+% Now add the new Venc to the private 'csa' field of the Siemens header - note, this operation may be expected to fail, so don't rely on it
 Head.csa.FlowVenc = NewVenc;
 
 % And finally, some boilerplate options for co-registered or fused velocity images, including the all-important scaling slope and intercept
