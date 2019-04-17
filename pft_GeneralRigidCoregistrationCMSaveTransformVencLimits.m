@@ -344,7 +344,7 @@ Exclude = (abs(Delta) > 8.0*LoVenc);
 Include = ~Exclude;
 
 % Rescale the o/p to 16-bits
-MoCoFusedVelocity = zeros([NROWS, NCOLS, NEPOCHS, NSLICES], 'double');
+MoCoFusedVelocity = MoCoLoVencVelocity;
 
 MoCoFusedVelocity(Include) = MoCoLoVencVelocity(Include) + Delta(Include);
 
@@ -398,7 +398,7 @@ Exclude = (abs(Epsilon) > LoVenc);
 Include = ~Exclude;
 
 % Rescale the o/p to 16-bits
-TwiceCorrectedFusedVelocity = zeros([NROWS, NCOLS, NEPOCHS, NSLICES], 'double');
+TwiceCorrectedFusedVelocity = MoCoFusedVelocity;
 
 TwiceCorrectedFusedVelocity(Include) = MoCoFusedVelocity(Include) + Epsilon(Include);
 
