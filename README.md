@@ -87,19 +87,28 @@ and dual-Venc merged results, having regard for the differences between headers 
    
 The workflow creates an audit trail of several intermediate results, as well as the final merged PC cine-stack and a short text-mode summary.
 
-a. The motion-corrected low-Venc modulus cine-stack.
+a. The motion-corrected Low-Venc modulus (cine-stack).
 
-b. The motion-corrected low-Venc PC cine-stack.
+b. The motion-corrected Low-Venc velocity.
 
-c. The manual shift corrections (as text files) and the displacement fields (as MAT files).
+c. The motion-corrected fused velocity.
 
-d. Screenshots of each epoch of the modulus and PC acquisition, before and after co-registration, in the format of a volume montage. 
+d. The filtered motion-corrected fused velocity.
 
-e. The merged PC cine-stack.
+e. The discrepancy between the motion-corrected fused velocity and the High-Venc velocity.
 
-f. The difference between the original high-Venc PC cine-stack and the final merged PC cine-stack - i.e., a "discrepancy" measure.
+f. The twice-corrected fused velocity (a second adjustment is applied, to the nearest multiple of LowVenc, to correct for interpolation effects at wrapping boundaries).
 
-g. A simple text-mode summary.
+g. The filtered twice-corrected fused velocity.
+
+h. The residual between the twice-corrected fused velocity and the High-Venc velocity.
+
+i. Co-registration mosaic screenshots, both modulus and phase, before and after co-registration at each epoch.
+
+i. The manual shift corrections (as text files), together with the displacement fields (as MAT files) for the non-rigid co-registration, 
+   or the transformation matrices (as MAT files) for the rigid co-registration. 
+
+j. A simple text-mode summary.
 
 Note that the input cine-stacks are sorted according to slice location and trigger time, and that the output cine-stacks are written
 in the order [ Row, Column, Epoch, Slice ], with the last index varying most slowly according to the MATLAB convention.
