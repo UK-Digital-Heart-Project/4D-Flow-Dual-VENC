@@ -128,10 +128,10 @@ if (exist(ScreenshotTarget, 'dir') ~= 7)
 end
 
 % 10. Manual shift corrections and transformation matrices
-DisplacementTarget = fullfile(Root, 'OFFLINE - TRANSFORMATION MATRICES - RIGID');
+TransformationTarget = fullfile(Root, 'OFFLINE - TRANSFORMATION MATRICES - RIGID');
 
-if (exist(DisplacementTarget, 'dir') ~= 7)
-  mkdir(DisplacementTarget);
+if (exist(TransformationTarget, 'dir') ~= 7)
+  mkdir(TransformationTarget);
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
