@@ -374,15 +374,11 @@ Kernel = [ 1.0 2.0 1.0 ; ...
            2.0 4.0 2.0 ; ...
            1.0 2.0 1.0 ]/16.0;
 
-n = 1;
-
 for s = 1:NSLICES
   for e = 1:NEPOCHS
     Part = MoCoFusedVelocity(:, :, e, s);
     
     FilteredMoCoFusedVelocity(:, :, e, s) = conv2(Part, Kernel, 'same');
-    
-    n = n + 1;
   end
 end
 
@@ -432,15 +428,11 @@ Kernel = [ 1.0 2.0 1.0 ; ...
            2.0 4.0 2.0 ; ...
            1.0 2.0 1.0 ]/16.0;
 
-n = 1;
-
 for s = 1:NSLICES
   for e = 1:NEPOCHS
     Part = TwiceCorrectedFusedVelocity(:, :, e, s);
     
     FilteredTwiceCorrectedFusedVelocity(:, :, e, s) = conv2(Part, Kernel, 'same');
-    
-    n = n + 1;
   end
 end
 
