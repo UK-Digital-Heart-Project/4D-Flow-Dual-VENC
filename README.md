@@ -29,6 +29,13 @@ Velocity = Intercept + Slope.Grayscale,
 
 where Intercept = - LowVenc and Slope = LowVenc/(2^11).
 
+There is also an option to control the interpolation used during the co-registration step.
+The choices are:
+
+a. Linear (the default);
+b. Nearest-neighbour (this should avoid the wrapping-boundary artefact which is mitigated during the second-correction phase);
+c. Cubic (which should give a smoother result than either of the other two options, albeit without suppressing entirely the wrapping-boundary artefact).
+
 ## Method
 
 1. At each cardiac phase (epoch), the low-Venc modulus volume is co-registered to the high-Venc volume.
