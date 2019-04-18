@@ -231,7 +231,7 @@ for e = 1:NEPOCHS
   % Now perform the non-rigid co-registration and save the transformation for re-use; create the MoCo image with the selected Interpolation
   [ Displacement, DisposableRegisteredMovingFine ] = imregdemons(MovingFine, FixedFine);  
   
-  RegisteredMovingFine = imwarp(MovingFine, Displacement, 'Interp', Interpolation);
+  RegisteredMovingFine = imwarp(MovingFine, Displacement, Interpolation);
   
   % Downsample the result in the z-direction  
   RegisteredMoving = pft_DownsampleSlices(RegisteredMovingFine, SZ, TZ);
@@ -289,7 +289,7 @@ for e = 1:NEPOCHS
   MovingFine = MovingFine(1+PADS:end-PADS, 1+PADS:end-PADS, 1+PADS:end-PADS); 
   
   % Apply the previously computed non-rigid transformation
-  RegisteredMovingFine = imwarp(MovingFine, Displacement, 'Interp', Interpolation);
+  RegisteredMovingFine = imwarp(MovingFine, Displacement, Interpolation);
   
   % Downsample the result in the z-direction
   RegisteredMoving = pft_DownsampleSlices(RegisteredMovingFine, SZ, TZ);

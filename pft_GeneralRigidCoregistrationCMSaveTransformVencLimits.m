@@ -233,8 +233,8 @@ for e = 1:NEPOCHS
   % Now perform the rigid co-registration and save the transformation for re-use
   Transform = imregtform(MovingFine, FixedFine, 'rigid', Optimizer, Metric);
   
-  RegisteredMovingFine = imwarp(MovingFine, Transform, 'OutputView', imref3d(size(MovingFine)), 'Interp', Interpolation);
-  
+  [ RegisteredMovingFine, DisposableReferenceObject ] = imwarp(MovingFine, Transform, Interpolation, 'OutputView', imref3d(size(MovingFine)));
+    
   % Downsample the result in the z-direction  
   RegisteredMoving = pft_DownsampleSlices(RegisteredMovingFine, SZ, TZ);
   
@@ -291,7 +291,7 @@ for e = 1:NEPOCHS
   MovingFine = MovingFine(1+PADS:end-PADS, 1+PADS:end-PADS, 1+PADS:end-PADS); 
   
   % Apply the previously computed rigid transformation
-  RegisteredMovingFine = imwarp(MovingFine, Transform, 'OutputView', imref3d(size(MovingFine)), 'Interp', Interpolation);
+  [ RegisteredMovingFine, DisposableReferenceObject ] = imwarp(MovingFine, Transform, Interpolation, 'OutputView', imref3d(size(MovingFine)));
   
   % Downsample the result in the z-direction
   RegisteredMoving = pft_DownsampleSlices(RegisteredMovingFine, SZ, TZ);
