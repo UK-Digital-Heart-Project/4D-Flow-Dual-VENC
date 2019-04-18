@@ -54,6 +54,14 @@ end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%% Decide on the image interpolation:
+%  Linear is the default;
+%  Nearest-neighbour should avoid the wrapping-boundary artefact;
+%  Cubic may give a smoother result than either of the other options, albeit with some residual wrapping-boundary artefact
+Interpolation = pft_GetInterpolationType;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %% Nominate some o/p folders
 Root = uigetdir(StartPath, 'Root folder for OUTPUT files');
 
@@ -169,13 +177,13 @@ DZ = ST;
 %% Convert the phase images to velocity units (cm/s)
 [ Intercept, Slope ] = pft_GetVelocityScaling(LoVencPhaseInfo{1});
 
-LoVencVelocity = Intercept + Slope*LoVencPhaseData;
+LoVencVelocity = Intercept + Slope*double(LoVencPhaseData);
 
 LoVenc = - Intercept;
 
 [ Intercept, Slope ] = pft_GetVelocityScaling(HiVencPhaseInfo{1});
 
-HiVencVelocity = Intercept + Slope*HiVencPhaseData;
+HiVencVelocity = Intercept + Slope*double(HiVencPhaseData);
 
 HiVenc = - Intercept;
 
@@ -225,7 +233,7 @@ for e = 1:NEPOCHS
   % Now perform the rigid co-registration and save the transformation for re-use
   Transform = imregtform(MovingFine, FixedFine, 'rigid', Optimizer, Metric);
   
-  RegisteredMovingFine = imwarp(MovingFine, Transform, 'OutputView', imref3d(size(MovingFine)));
+  RegisteredMovingFine = imwarp(MovingFine, Transform, 'OutputView', imref3d(size(MovingFine)), 'Interp', Interpolation);
   
   % Downsample the result in the z-direction  
   RegisteredMoving = pft_DownsampleSlices(RegisteredMovingFine, SZ, TZ);
@@ -283,7 +291,7 @@ for e = 1:NEPOCHS
   MovingFine = MovingFine(1+PADS:end-PADS, 1+PADS:end-PADS, 1+PADS:end-PADS); 
   
   % Apply the previously computed rigid transformation
-  RegisteredMovingFine = imwarp(MovingFine, Transform, 'OutputView', imref3d(size(MovingFine)));
+  RegisteredMovingFine = imwarp(MovingFine, Transform, 'OutputView', imref3d(size(MovingFine)), 'Interp', Interpolation);
   
   % Downsample the result in the z-direction
   RegisteredMoving = pft_DownsampleSlices(RegisteredMovingFine, SZ, TZ);
@@ -705,6 +713,10 @@ fprintf(fid, '\n');
 
 fprintf(fid,'Once-Corrected Discrepant Venc = %.2f cm/s\n', DiscrepantNewVenc);
 frintf(fid, 'Twice-Corrected Residual Venc  = %.2f cm/s\n', ResidualNewVenc);
+
+fprintf(fid, '\n');
+
+fprintf(fid, 'Interpolation used during co-registration: %s\n', Interpolation);
 
 fprintf(fid, '\n');
 
