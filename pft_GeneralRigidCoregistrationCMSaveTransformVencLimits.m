@@ -228,7 +228,7 @@ for e = 1:NEPOCHS
   
   T = table(RowShift, ColShift, PlnShift, 'VariableNames', { 'Row_Shift', 'Col_Shift', 'Pln_Shift' });
   
-  writetable(T, fullfile(TransformTarget, Leaf));  
+  writetable(T, fullfile(TransformationTarget, Leaf));  
   
   % Now perform the rigid co-registration and save the transformation for re-use
   Transform = imregtform(MovingFine, FixedFine, 'rigid', Optimizer, Metric);
@@ -241,7 +241,7 @@ for e = 1:NEPOCHS
   % Save the transformation to a MAT file for auditing and possible later re-use (outside this script)
   Leaf = sprintf('Transform-%03d.mat', e);
   
-  save(fullfile(TransformTarget, Leaf), 'Transform');
+  save(fullfile(TransformationTarget, Leaf), 'Transform');
   
   MoCoLoVencMagnitude(:, :, e, :) = RegisteredMoving;
   
