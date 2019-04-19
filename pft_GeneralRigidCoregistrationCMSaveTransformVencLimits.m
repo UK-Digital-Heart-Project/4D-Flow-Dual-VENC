@@ -712,7 +712,7 @@ fprintf(fid, 'Filtered Twice-Corrected Fused Venc  = %.2f cm/s\n', FilteredTwice
 fprintf(fid, '\n');
 
 fprintf(fid,'Once-Corrected Discrepant Venc = %.2f cm/s\n', DiscrepantNewVenc);
-frintf(fid, 'Twice-Corrected Residual Venc  = %.2f cm/s\n', ResidualNewVenc);
+fprintf(fid, 'Twice-Corrected Residual Venc  = %.2f cm/s\n', ResidualNewVenc);
 
 fprintf(fid, '\n');
 
