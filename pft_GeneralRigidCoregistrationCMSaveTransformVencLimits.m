@@ -716,6 +716,7 @@ frintf(fid, 'Twice-Corrected Residual Venc  = %.2f cm/s\n', ResidualNewVenc);
 
 fprintf(fid, '\n');
 
+fprintf(fid, 'Co-registration:                           Rigid\n');
 fprintf(fid, 'Interpolation used during co-registration: %s\n', Interpolation);
 
 fprintf(fid, '\n');
@@ -747,7 +748,7 @@ FolderData = { 'INPUTS',             ' '; ...
 xlswrite(fullfile(Root, 'Processing Summary.xlsx'), FolderData, 'Data Folders');
 
 ProcessingData = { 'Co-Registration', 'Interpolation'; ...
-                   'Non-Rigid',        Interpolation };
+                   'Rigid',            Interpolation };
                
 xlswrite(fullfile(Root, 'Processing Summary.xlsx'), ProcessingData, 'Processing');
 

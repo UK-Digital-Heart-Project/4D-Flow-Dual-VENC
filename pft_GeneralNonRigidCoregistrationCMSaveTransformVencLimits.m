@@ -714,6 +714,7 @@ frintf(fid, 'Twice-Corrected Residual Venc  = %.2f cm/s\n', ResidualNewVenc);
 
 fprintf(fid, '\n');
 
+fprintf(fid, 'Co-registration:                           Non-Rigid\n');
 fprintf(fid, 'Interpolation used during co-registration: %s\n', Interpolation);
 
 fprintf(fid, '\n');
