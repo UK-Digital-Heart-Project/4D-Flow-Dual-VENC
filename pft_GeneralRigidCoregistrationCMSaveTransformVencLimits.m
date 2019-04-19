@@ -73,10 +73,10 @@ if ~ischar(Root)
 end
 
 % 01. Motion-corrected Low-Venc modulus
-MoCoLoVencMagnitudeitudeTarget = fullfile(Root, 'OFFLINE - MOCO LOW-VENC MAGNITUDE - RIGID');
+MoCoLoVencMagnitudeTarget = fullfile(Root, 'OFFLINE - MOCO LOW-VENC MAGNITUDE - RIGID');
 
-if (exist(MoCoLoVencMagnitudeitudeTarget, 'dir') ~= 7)
-  mkdir(MoCoLoVencMagnitudeitudeTarget);
+if (exist(MoCoLoVencMagnitudeTarget, 'dir') ~= 7)
+  mkdir(MoCoLoVencMagnitudeTarget);
 end
 
 % 02. Motion-corrected Low-Venc velocity
