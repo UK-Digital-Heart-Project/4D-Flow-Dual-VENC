@@ -119,6 +119,8 @@ i. The manual shift corrections (as text files), together with the displacement 
 
 j. A simple text-mode summary.
 
+k. An Excel file, with more detailed information grouped into several tabs.
+
 Note that the input cine-stacks are sorted according to slice location and trigger time, and that the output cine-stacks are written
 in the order [ Row, Column, Epoch, Slice ], with the last index varying most slowly according to the MATLAB convention.
 This may mean that, whereas the input data show entire volumes at a given epoch, then step to the next epoch, the outputs show complete cines
