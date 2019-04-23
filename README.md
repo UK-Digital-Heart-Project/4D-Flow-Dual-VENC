@@ -139,6 +139,7 @@ Clone this repo to a folder in your MATLAB workspace, then add all the directori
 For a 3D cine-stack, run one of the main scripts at the outer level:
 
 pft_GeneralRigidCoregistrationCMSaveTransformVencLimits.m
+
 pft_GeneralNonRigidCoregistrationCMSaveTransformVencLimits.m
 
 Follow the prompts to nominate source and target directories.
@@ -151,6 +152,7 @@ starting point for the automated non-rigid co-registration.
 For a single-slice cine, run one of the scripts:
 
 pft_Run2DRigidMergingScript.m
+
 pft_Run2DNonRigidMergingScript.m
 
 These will call the appropriate worker functions (which have been written to be callable programmatically, since the workload is small):
