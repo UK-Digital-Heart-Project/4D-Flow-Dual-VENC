@@ -25,11 +25,13 @@ A complete analysis involves merging low and high-Venc data sets acquired with 3
 
 Velocities (in units of cm/s) are calculated from the input PC cine-stacks according to the equation:
 
-Velocity = Intercept + Slope.Grayscale, 
+Velocity = Intercept + Slope*double(Grayscale), 
 
-where Intercept = - LowVenc and Slope = LowVenc/(2^11).
+where Intercept = - Venc and Slope = Venc/(2^11).
 
-There is also an option to control the interpolation used during the co-registration step.
+There is also an option to control the interpolation used during the co-registration step 
+(likewise, during the interpolation to cubical voxels and subsequent down-sampling to the original z-locations).
+
 The choices are:
 
 a. Linear (the default);
@@ -134,7 +136,10 @@ Clone this repo to a folder in your MATLAB workspace, then add all the directori
 
 ## Usage
 
-Run one of the main scripts at the outer level.
+For a 3D cine-stack, run one of the main scripts at the outer level:
+
+pft_GeneralRigidCoregistrationCMSaveTransformVencLimits.m
+pft_GeneralNonRigidCoregistrationCMSaveTransformVencLimits.m
 
 Follow the prompts to nominate source and target directories.
 
@@ -142,6 +147,16 @@ During the co-registration step, a GUI with sliders will prompt for manual shift
 to its high-Venc counterpart. A push-button applies the change. Corrections are carried over from one epoch to the next, so it may be sufficient
 to make a careful correction for the first epoch, then hit "Apply" for the rest. In any case, the manually corrected low-Venc stack is merely the
 starting point for the automated non-rigid co-registration.
+
+For a single-slice cine, run one of the scripts:
+
+pft_Run2DRigidMergingScript.m
+pft_Run2DNonRigidMergingScript.m
+
+These will call the appropriate worker functions (which have been written to be callable programmatically, since the workload is small):
+
+pft_Rigid2DMergingFunction.m
+pft_NonRigid2DMergingFunction.m
 
 ## Test data
 
