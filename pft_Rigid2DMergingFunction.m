@@ -135,9 +135,9 @@ for e = 1:NEPOCHS
   BB = imresize(Moving, 4, 'nearest');
   
   % Now perform the RIGID co-registration and save the transformation for re-use; create the MoCo image with the selected Interpolation
-  Transform = imregtform(MovingFine, FixedFine, 'rigid', Optimizer, Metric);
+  Transform = imregtform(Moving, Fixed, 'rigid', Optimizer, Metric);
   
-  [ RegisteredMoving, DisposableReferenceObject ] = imwarp(MovingFine, Transform, Interpolation, 'OutputView', imref2d(size(Moving)));
+  [ RegisteredMoving, DisposableReferenceObject ] = imwarp(Moving, Transform, Interpolation, 'OutputView', imref2d(size(Moving)));
     
   % Save the transformation to a MAT file for auditing and possible later re-use (outside this script)
   Leaf = sprintf('Transform-%03d.mat', e);
