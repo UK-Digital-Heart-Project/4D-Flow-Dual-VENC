@@ -1,8 +1,8 @@
-function [ Target, SZ, TZ ] = pft_InterpolateSlices(Source, DR, DZ)
+function [ Target, SZ, TZ ] = pft_InterpolateSlices(Source, DR, DZ, Interpolation)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % A function to create a 3D array with isotropic pixels from a 2D stack, isotropic in-plane but thick in the slice direction.               %
 %                                                                                                                                           %
-% PFT - 20. 04. 2018.                                                                                                                       %
+% PFT - 20. 04. 2018, modified - 23. 04. 2019.                                                                                              %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Determine the i/p array size and type
@@ -38,7 +38,7 @@ parfor c = 1:NC
     V = S(r, c, :);
     V = reshape(V, 1, 1, NP+2*E);
     V = squeeze(V);
-    W = interp1(SZ, V, TZ, 'spline');
+    W = interp1(SZ, V, TZ, Interpolation);
     W = reshape(W, 1, 1, TP);
     T(r, c, :) = W;
   end  

@@ -210,11 +210,11 @@ PlnShift = 0;
 for e = 1:NEPOCHS
   % Interpolate the fixed (High-Venc) image to cubical voxels  
   Fixed = squeeze(HiVencMagnitudeData(:, :, e, :));  
-  [ FixedFine, SZ, TZ ] = pft_InterpolateSlices(Fixed, DR, DZ);
+  [ FixedFine, SZ, TZ ] = pft_InterpolateSlices(Fixed, DR, DZ, Interpolation);
   
   % Interpolate the moving (Low-Venc) image to cubical voxels
   Moving = squeeze(LoVencMagnitudeData(:, :, e, :));
-  [ MovingFine, SZ, TZ ] = pft_InterpolateSlices(Moving, DR, DZ);
+  [ MovingFine, SZ, TZ ] = pft_InterpolateSlices(Moving, DR, DZ, Interpolation);
   
   % Save 2 modulus image mosaics for later display
   AA = pft_MosaicImages(Fixed, Rows, Cols, Wd, Ht);
@@ -236,7 +236,7 @@ for e = 1:NEPOCHS
   [ RegisteredMovingFine, DisposableReferenceObject ] = imwarp(MovingFine, Transform, Interpolation, 'OutputView', imref3d(size(MovingFine)));
     
   % Downsample the result in the z-direction  
-  RegisteredMoving = pft_DownsampleSlices(RegisteredMovingFine, SZ, TZ);
+  RegisteredMoving = pft_DownsampleSlices(RegisteredMovingFine, SZ, TZ, Interpolation);
   
   % Save the transformation to a MAT file for auditing and possible later re-use (outside this script)
   Leaf = sprintf('Transform-%03d.mat', e);
@@ -281,7 +281,7 @@ for e = 1:NEPOCHS
   
   % Interpolate the Low-Venc velocity image to cubical voxels
   Moving = squeeze(LoVencVelocity(:, :, e, :));
-  [ MovingFine, SZ, TZ ] = pft_InterpolateSlices(Moving, DR, DZ);
+  [ MovingFine, SZ, TZ ] = pft_InterpolateSlices(Moving, DR, DZ, Interpolation);
   
   % Apply the previously applied manual circular shift (with padding beforehand, and trimming afterwards)
   PADS = 32;
@@ -294,7 +294,7 @@ for e = 1:NEPOCHS
   [ RegisteredMovingFine, DisposableReferenceObject ] = imwarp(MovingFine, Transform, Interpolation, 'OutputView', imref3d(size(MovingFine)));
   
   % Downsample the result in the z-direction
-  RegisteredMoving = pft_DownsampleSlices(RegisteredMovingFine, SZ, TZ);
+  RegisteredMoving = pft_DownsampleSlices(RegisteredMovingFine, SZ, TZ, Interpolation);
   
   % Extract an epoch from the original High-Venc cine-stack
   Fixed = squeeze(HiVencVelocity(:, :, e, :));
@@ -711,7 +711,7 @@ fprintf(fid, 'Filtered Twice-Corrected Fused Venc  = %.2f cm/s\n', FilteredTwice
 
 fprintf(fid, '\n');
 
-fprintf(fid,'Once-Corrected Discrepant Venc = %.2f cm/s\n', DiscrepantNewVenc);
+fprintf(fid, 'Once-Corrected Discrepant Venc = %.2f cm/s\n', DiscrepantNewVenc);
 fprintf(fid, 'Twice-Corrected Residual Venc  = %.2f cm/s\n', ResidualNewVenc);
 
 fprintf(fid, '\n');
