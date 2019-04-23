@@ -565,7 +565,7 @@ fprintf(fid, 'Hi-Venc Phase source folder:     %s\n', HiVencPhaseSource);
 
 fprintf(fid, '\n');
 
-fprintf(fid, 'Output MergedRoot folder: %s\n', MergedRoot);
+fprintf(fid, 'Output root folder: %s\n', MergedRoot);
 
 fprintf(fid, '\n');
 
