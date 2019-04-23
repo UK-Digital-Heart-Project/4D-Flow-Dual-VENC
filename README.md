@@ -158,6 +158,7 @@ pft_Run2DNonRigidMergingScript.m
 These will call the appropriate worker functions (which have been written to be callable programmatically, since the workload is small):
 
 pft_Rigid2DMergingFunction.m
+
 pft_NonRigid2DMergingFunction.m
 
 ## Test data
