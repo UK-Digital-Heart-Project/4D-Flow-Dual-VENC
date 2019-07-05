@@ -84,4 +84,4 @@ Interpolation = pft_GetInterpolationType;
 
 %% Call the worker function - this has been written so that it can be called programmatically for multiple acquisitions
 
-pft_NonRigid2DMergingFunction(LoVencMagnitudeSource, HiVencMagnitudeSource, LoVencPhaseSource, HiVencPhaseSource, MergedRoot, Interpolation);
+pft_NonRigidThreeDimensionalMergingFunction(LoVencMagnitudeSource, HiVencMagnitudeSource, LoVencPhaseSource, HiVencPhaseSource, MergedRoot, Interpolation);

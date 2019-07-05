@@ -12,7 +12,15 @@ fclose('all');
 
 %% Nominate some input folders
 
-StartPath = 'S:\4-D Flow MRI\Studies';
+if ispc
+  Username = getenv('Username');
+  Home = fullfile('C:', 'Users', Username, 'Desktop');
+elseif isunix || ismac
+  [ Status, CmdOut ] = system('whoami');
+  Home = fullfile('home', CmdOut, 'Desktop');
+end  
+  
+StartPath = uigetdir(Home, 'Select a top-level folder with scan folders inside');
 
 % 01. Low-Venc Magnitude
 LoVencMagnitudeSource = uigetdir(StartPath, 'Low-Venc MAGNITUDE folder');
@@ -68,8 +76,12 @@ if ~ischar(MergedRoot)
   return;
 end
 
+%% Fetch the interpolation type
+
+Interpolation = pft_GetInterpolationType;
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Call the worker function - this has been written so that it can be called programmatically for multiple acquisitions
 
-pft_Rigid2DMergingFunction(LoVencMagnitudeSource, HiVencMagnitudeSource, LoVencPhaseSource, HiVencPhaseSource, MergedRoot);
+pft_Rigid2DMergingFunction(LoVencMagnitudeSource, HiVencMagnitudeSource, LoVencPhaseSource, HiVencPhaseSource, MergedRoot, Interpolation);

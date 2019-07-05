@@ -1,8 +1,9 @@
-function pft_NonRigid2DMergingFunction(LoVencMagnitudeSource, HiVencMagnitudeSource, LoVencPhaseSource, HiVencPhaseSource, MergedRoot)
+function pft_NonRigid2DMergingFunction(LoVencMagnitudeSource, HiVencMagnitudeSource, LoVencPhaseSource, HiVencPhaseSource, MergedRoot, Interpolation)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Nominate some o/p folders
+
 % 01. Motion-corrected Low-Venc modulus
 MoCoLoVencMagnitudeTarget = fullfile(MergedRoot, 'OFFLINE - MOCO LOW-VENC MAGNITUDE - NON-RIGID');
 
@@ -72,14 +73,6 @@ DisplacementTarget = fullfile(MergedRoot, 'OFFLINE - DISPLACEMENT FIELDS - NON-R
 if (exist(DisplacementTarget, 'dir') ~= 7)
   mkdir(DisplacementTarget);
 end
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% Decide on the image interpolation:
-%   Linear is the default;
-%   Nearest-neighbour should avoid the wrapping-boundary artefact;
-%   Cubic may give a smoother result than either of the other options, albeit with some residual wrapping-boundary artefact
-Interpolation = pft_GetInterpolationType;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
