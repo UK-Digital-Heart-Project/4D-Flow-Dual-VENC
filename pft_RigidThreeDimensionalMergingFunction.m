@@ -155,6 +155,11 @@ for e = 1:NEPOCHS
   % Co-register the modulus images approximately, manually, but only once - apply the correction to the moving image in-place
   if (e == 1)
     [ MovingFine, RowShift, ColShift, PlnShift ] = pft_CoregisterInteractively(MovingFine, FixedFine, RowShift, ColShift, PlnShift);
+  else
+    Pads = 32;
+    MovingFine = padarray(MovingFine, [Pads, Pads, Pads], 0, 'both');
+    MovingFine = circshift(MovingFine, [RowShift, ColShift, PlnShift]);
+    MovingFine = MovingFine(1+Pads:end-Pads, 1+Pads:end-Pads, 1+Pads:end-Pads);
   end
   
   % Save the manual shift corrections in a CSV file - multiple files are saved (all the same) for compatibility with earlier versions
